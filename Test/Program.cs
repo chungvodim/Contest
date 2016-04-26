@@ -23,8 +23,10 @@ namespace Test
         }
         static void Main(string[] args)
         {
-            var dict = LoadDictionary("words.txt");
+            var originDict = LoadDictionary("words.txt");
+            Dictionary<string, int> dict = new Dictionary<string, int>();
             //const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            string vowels = string.Empty;
             var random = new Random();
             
             byte[] data = new byte[1024];
@@ -54,9 +56,12 @@ namespace Test
 
             while (true)
             {
-                if (stringData.Contains("Press enter to continue"))
+                if (stringData.Contains("Get ready"))
                 {
                     input = "\n";
+                    dict = originDict;
+                    vowels = "ESIARN";
+                    isFilteredByLength = false;
                 }
 
                 if (stringData.Contains("OVER"))
@@ -78,9 +83,22 @@ namespace Test
                     }
                     var subRegex = new Regex(wordToGuess.Replace("_", "\\w"));
                     dict = dict.Where(x => subRegex.Match(x.Key).Success).ToDictionary(x => x.Key, x => x.Value);
-                    var randomWord = dict.ElementAt(random.Next(dict.Count)).Key;
-                    var leftIndex = wordToGuess.IndexOf("_");
-                    input = randomWord[leftIndex].ToString();
+
+                    if (wordToGuess.Replace("_","").Length >= 2 || vowels.Length == 0)
+                    {
+                        if(dict != null && dict.Count > 0)
+                        {
+                            var randomWord = dict.ElementAt(random.Next(dict.Count)).Key;
+                            var leftIndex = wordToGuess.IndexOf("_");
+                            input = randomWord[leftIndex].ToString();
+                        }
+                    }
+                    else
+                    {
+                        input = vowels[0].ToString();
+                        vowels = vowels.Substring(1);
+                    }
+                    
                     Console.WriteLine("input: {0},", input);
                 }
 
