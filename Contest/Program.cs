@@ -41,6 +41,56 @@ namespace Contest
     }
     class Program
     {
+        public static int MinimumTables(int dinners)
+        {
+            int minimumTables = 0;
+            if (dinners == 0)
+            {
+                minimumTables = 0;
+            }
+            else if (dinners <= 4)
+            {
+                minimumTables = 1;
+            }
+            else
+            {
+                minimumTables = (int)Math.Ceiling((double)(dinners - 2) / 2);
+            }
+            return minimumTables;
+        }
+
+        public static IEnumerable<KeyValuePair<string, int>> VoynichManuscript(string[] words)
+        {
+            Dictionary<string, int> lstVoy = new Dictionary<string, int>();
+            for (int i = 0; i < words.Length; i++)
+            {
+                if (!lstVoy.ContainsKey(words[i]))
+                {
+                    lstVoy.Add(words[i], 1);
+                }
+                else
+                {
+                    lstVoy[words[i]]++;
+                }
+            }
+            return lstVoy.OrderByDescending(x => x.Value).Take(3);
+        }
+        public static string ConvertVoynichToString(IEnumerable<KeyValuePair<string, int>> lstVoy)
+        {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < lstVoy.Count(); i++)
+            {
+                if (i != lstVoy.Count() - 1)
+                {
+                    sb.Append(String.Format("{0} {1},", lstVoy.ElementAt(i).Key, lstVoy.ElementAt(i).Value));
+                }
+                else
+                {
+                    sb.Append(String.Format("{0} {1}", lstVoy.ElementAt(i).Key, lstVoy.ElementAt(i).Value));
+                }
+            }
+            return sb.ToString().Trim();
+        }
         public static List<Tape> GetTapes(string[] codes)
         {
             List<Tape> lstTape = new List<Tape>();
