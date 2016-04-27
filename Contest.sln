@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contest", "Contest\Contest.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{607EDC81-41B4-46C1-92C6-2DF3D2D91752}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LookingGlass", "LookingGlass\LookingGlass.csproj", "{DE526C2C-9E5C-4464-9291-1CB8A500A18F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tiles", "Tiles\Tiles.csproj", "{8C120FC7-9651-4463-B99C-50CDEAAB9B80}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{607EDC81-41B4-46C1-92C6-2DF3D2D91752}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{607EDC81-41B4-46C1-92C6-2DF3D2D91752}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{607EDC81-41B4-46C1-92C6-2DF3D2D91752}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE526C2C-9E5C-4464-9291-1CB8A500A18F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE526C2C-9E5C-4464-9291-1CB8A500A18F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE526C2C-9E5C-4464-9291-1CB8A500A18F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE526C2C-9E5C-4464-9291-1CB8A500A18F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C120FC7-9651-4463-B99C-50CDEAAB9B80}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C120FC7-9651-4463-B99C-50CDEAAB9B80}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C120FC7-9651-4463-B99C-50CDEAAB9B80}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C120FC7-9651-4463-B99C-50CDEAAB9B80}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
