@@ -158,8 +158,8 @@ namespace Test
                         Console.WriteLine("missed letters: {0}", missedLetters);
                         Console.WriteLine("dict length: {0}", dict.Count);
 
-                        if (wordToGuess.Replace("_", "").Length >= 1 || numberOfGuess >= StrategyChars.Length)// found at least one letter
-                        {
+                        //if (wordToGuess.Replace("_", "").Length >= 1 || numberOfGuess >= StrategyChars.Length)// found at least one letter
+                        //{
                             if (dict != null && dict.Count > 0)
                             {
                                 input = FindMostLikelyLetter(dict, matchedLetters, letters);
@@ -169,15 +169,20 @@ namespace Test
                                 //input = randomWord[leftIndex].ToString();
                                 guessedletters += input;
                             }
-                        }
-                        else
-                        {
-                            input = StrategyChars[numberOfGuess].ToString();
-                            guessedletters += input;
-                            numberOfGuess++;
-                        }
+                        //}
+                        //else
+                        //{
+                        //    input = StrategyChars[numberOfGuess].ToString();
+                        //    guessedletters += input;
+                        //    numberOfGuess++;
+                        //}
 
                         Console.WriteLine("input: {0},", input);
+                    }
+                    else
+                    {
+                        Console.WriteLine(".............");
+                        Console.ReadLine();
                     }
                 }
 
