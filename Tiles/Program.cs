@@ -71,80 +71,121 @@ namespace Tiles
             }
             return result;
         }
-        public static int FindBiggestSum(int[,] arr, int rows, int cols)
+        public static bool UpdateMax(int[] arr, ref int currentMax, ref int currentUp, ref int currentDown)
         {
-            int rResult = 0;
-            int cResult = 0;
-            int sum = 0;
-            //int tempStart = 0;
-            //int startIndex = 0;
-            //int endIndex = 0;
+            int max = 0;
+            int currentSum = 0;
+            int up = 0;
+            int down = 0;
+            int tempIndex = 0;
 
-            int[,] sumArr = new int[rows * 3, cols * 3];
+            for (int i = 0; i < arr.Length; i++)
+            {
+                currentSum += arr[i];
+                if (currentSum > max)
+                {
+                    max = currentSum;
+                    up = tempIndex;
+                    down = i;
+                }
+                if (currentSum < 0)
+                {
+                    currentSum = 0;
+                    tempIndex = i + 1;
+                }
+            }
+            if(max > currentMax)
+            {
+                currentUp = up;
+                currentDown = down;
+                currentMax = max;
+                return true;
+            }
+            return false;
+        }
+        private static bool CheckInfinity(int[,] sumArr, int left, int right, int up, int down)
+        {
+            int sum = 0;
+            int rows = sumArr.GetLength(0);
+            int cols = sumArr.GetLength(1);
             for (int i = 0; i < rows; i++)
             {
-                for (int j = 0; j < cols * 3; j++)
+                for (int j = left; j <= right; j++)
+                {
+                    sum += sumArr[i, j];
+                }
+            }
+            if (sum > 0)
+            {
+                return true;
+            }
+            sum = 0;
+            for (int i = 0; i < cols; i++)
+            {
+                for (int j = up; j <= down; j++)
+                {
+                    sum += sumArr[j, i];
+                }
+            }
+            if (sum > 0)
+            {
+                return true;
+            }
+            return false;
+        }
+        public static string FindBiggestSum(int[,] arr, int rows, int cols)
+        {
+            int max = 0;
+            int left = 0;
+            int right = 0;
+            int up = 0;
+            int down = 0;
+            int[] column;
+            bool isInfinity = false;
+
+            int[,] sumArr = new int[rows * 2, cols * 2];
+            for (int i = 0; i < rows * 2; i++)
+            {
+                for (int j = 0; j < cols * 2; j++)
                 {
                     sumArr[i, j] = arr[i % rows, j % cols];
                 }
             }
-
-            List<int> tempList = new List<int>();
-            for (int i = 0; i < rows * 3; i++)
+            for (int l = 0; l < cols * 2; l++)
             {
-                for (int j = 0; j < cols * 3; j++)
+                column = new int[rows * 2];
+                for (int r = l; r < cols * 2; r++)
                 {
-                    tempList.Add(sumArr[i,j]);
+                    for (int j = 0; j < rows * 2; j++)
+                    {
+                        column[j] += sumArr[j, r];
+                    }
+                    
+                    bool isNewMax = UpdateMax(column, ref max, ref up, ref down);
+                    if (isNewMax)
+                    {
+                        left = l;
+                        right = r;
+                    }
                 }
             }
-
-            for (int i = 0; i < tempList.Count; i++)
+            isInfinity = CheckInfinity(sumArr, left, right, up, down);
+            if (isInfinity)
             {
-                sum += tempList[i];
-                if (sum > rResult)
-                {
-                    rResult = sum;
-                    //startIndex = tempStart;
-                    //endIndex = i;
-                }
-                if (sum < 0)
-                {
-                    sum = 0;
-                    //tempStart = i + 1;
-                }
+                return "INFINITY";
             }
-
-            tempList.Clear();
-
-            for (int i = 0; i < rows * 3; i++)
-            {
-                for (int j = 0; j < cols * 3; j++)
-                {
-                    tempList.Add(sumArr[j,i]);
-                }
-            }
-
-            for (int i = 0; i < tempList.Count; i++)
-            {
-                sum += tempList[i];
-                if (sum > cResult)
-                {
-                    cResult = sum;
-                }
-                if (sum < 0)
-                {
-                    sum = 0;
-                }
-            }
-
-            return Math.Max(rResult,cResult);
+            return max.ToString();
         }
 
+        
 
         static void Main(string[] args)
         {
-            string[] lines = File.ReadAllLines("sampleInput.txt");
-            int t = Convert.ToInt32(lines[0]);
+            StringBuilder sb = new StringBuilder();
+            string result = string.Empty;
+            string[] lines = File.ReadAllLines("submitInput.txt");
+            //int t = Convert.ToInt32(lines[0]);
+            int t = 1;
             for (int i = 1; i < lines.Length; i++)
             {
                 int n = Convert.ToInt32(lines[i].Split(' ')[0]);
@@ -161,9 +202,13 @@ namespace Tiles
                         }
                     }
                     i += n;
-                    Console.WriteLine(FindBiggestSum(arr,n,m));
+                    result = String.Format("Case #{0}: {1}", t, FindBiggestSum(arr, n, m));
+                    Console.WriteLine(result);
+                    sb.AppendLine(result);
+                    t++;
                 }
             }
+            File.WriteAllText("submitTilesResult.txt",sb.ToString());
         }
     }
 }
