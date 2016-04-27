@@ -21,12 +21,55 @@ namespace Test
             }
             return dict;
         }
+
+        public static Dictionary<int, string> LoadVowelsDict()
+        {
+            Dictionary<int, string> dict = new Dictionary<int, string>();
+            dict.Add(1, "AI");
+            dict.Add(2, "AOEIUMBH");
+            dict.Add(3, "AEOIUYHBCK");
+            dict.Add(4, "AEOIUYSBF");
+            dict.Add(5, "SEAOIUYH");
+            dict.Add(6, "EAIOUSY");
+            dict.Add(7, "EIAOUS");
+            dict.Add(8, "EIAOU");
+            dict.Add(9, "EIAOU");
+            dict.Add(10, "EIOAU");
+            dict.Add(11, "EIOAD");
+            dict.Add(12, "EIOAF");
+            dict.Add(13, "IEOA");
+            dict.Add(14, "IEO");
+            dict.Add(15, "IEA");
+            dict.Add(16, "IEH");
+            dict.Add(17, "IER");
+            dict.Add(18, "IEA");
+            dict.Add(19, "IEA");
+            dict.Add(20, "IE");
+            return dict;
+        }
+
+        public static string FindMostLikelyLetter(Dictionary<string, int> dict, string guessedLetters, string letters)
+        {
+            string result = string.Empty;
+            Dictionary<string, int> mostLikelyLettersDict = new Dictionary<string, int>();
+            StringBuilder sb = new StringBuilder();
+            foreach (var item in guessedLetters)
+            {
+                letters = letters.Replace(item.ToString(),"");
+            }
+            foreach (var item in letters)
+            {
+                mostLikelyLettersDict.Add(item.ToString(), dict.Where(x => x.Key.Contains(item)).Count());
+            }
+            return mostLikelyLettersDict.OrderByDescending(x => x.Value).First().Key;
+        }
+
         static void Main(string[] args)
         {
             var originDict = LoadDictionary("words.txt");
+            var strategyDict = LoadVowelsDict();
             Dictionary<string, int> dict = new Dictionary<string, int>();
-            //const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            string vowels = string.Empty;
+            const string letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
             var random = new Random();
             
             byte[] data = new byte[1024];
@@ -35,6 +78,11 @@ namespace Test
             string wordToGuess = "";
             int wordToGuessLength = 0;
             bool isFilteredByLength = false;
+            int numberOfGuess = 0;
+            string StrategyChars = string.Empty;
+            string guessedletters = string.Empty;
+            string matchedLetters = string.Empty;
+            string missedLetters = string.Empty;
             TcpClient server;
             var regex = new Regex(@"\n\n(.*)\n\n");
             
@@ -56,53 +104,82 @@ namespace Test
 
             while (true)
             {
-                if (stringData.Contains("Get ready"))
+                if (stringData.Contains("Press enter to continue"))
                 {
                     input = "\n";
                     dict = originDict;
-                    vowels = "ESIARN";
                     isFilteredByLength = false;
+                    StrategyChars = string.Empty;
+                    guessedletters = string.Empty;
+                    matchedLetters = string.Empty;
+                    missedLetters = string.Empty;
+                    numberOfGuess = 0;
                 }
-
-                if (stringData.Contains("OVER"))
+                else if (stringData.Contains("OVER"))
                 {
                     Console.WriteLine("GAME OVER WITH DICT LENGTH : {0}", dict.Count);
                     Console.Read();
                 }
-
-                var match = regex.Match(stringData);
-                if (match.Success)
+                else
                 {
-                    wordToGuess = match.Groups[1].Value.Replace(" ","");
-                    wordToGuessLength = wordToGuess.Length;
-                    // Filter length
-                    if (!isFilteredByLength)
+                    var match = regex.Match(stringData);
+                    if (match.Success)
                     {
-                        dict = dict.Where(x => x.Value == wordToGuessLength).ToDictionary(x => x.Key, x => x.Value);
-                        isFilteredByLength = true;
-                    }
-                    var subRegex = new Regex(wordToGuess.Replace("_", "\\w"));
-                    dict = dict.Where(x => subRegex.Match(x.Key).Success).ToDictionary(x => x.Key, x => x.Value);
-
-                    if (wordToGuess.Replace("_","").Length >= 2 || vowels.Length == 0)
-                    {
-                        if(dict != null && dict.Count > 0)
+                        wordToGuess = match.Groups[1].Value.Replace(" ", "");
+                        wordToGuessLength = wordToGuess.Length;
+                        if (string.IsNullOrEmpty(StrategyChars))
                         {
-                            var randomWord = dict.ElementAt(random.Next(dict.Count)).Key;
-                            var leftIndex = wordToGuess.IndexOf("_");
-                            input = randomWord[leftIndex].ToString();
+                            StrategyChars = strategyDict[wordToGuess.Length];
                         }
-                    }
-                    else
-                    {
-                        input = vowels[0].ToString();
-                        vowels = vowels.Substring(1);
-                    }
-                    
-                    Console.WriteLine("input: {0},", input);
-                }
+                        // Filter length
+                        if (!isFilteredByLength)
+                        {
+                            dict = dict.Where(x => x.Value == wordToGuessLength).ToDictionary(x => x.Key, x => x.Value);
+                            isFilteredByLength = true;
+                        }
+                        // Filter By matched letters
+                        matchedLetters = wordToGuess.Replace("_", "");
+                        missedLetters = guessedletters;
+                        foreach (var item in matchedLetters)
+                        {
+                            missedLetters = missedLetters.Replace(item.ToString(), "");
+                        }
 
-                
+                        var subRegex = new Regex(wordToGuess.Replace("_", "\\w"));
+                        dict = dict.Where(x => subRegex.Match(x.Key).Success).ToDictionary(x => x.Key, x => x.Value);
+                        foreach (var item in missedLetters)
+                        {
+                            dict = dict.Where(x => !x.Key.Contains(item.ToString())).ToDictionary(x => x.Key, x => x.Value);
+                        }
+
+                        Console.WriteLine("word To Guess: {0}", wordToGuess);
+                        Console.WriteLine("guessed letters: {0}", guessedletters);
+                        Console.WriteLine("matched letters: {0}", matchedLetters);
+                        Console.WriteLine("missed letters: {0}", missedLetters);
+                        Console.WriteLine("dict length: {0}", dict.Count);
+
+                        if (wordToGuess.Replace("_", "").Length >= 1 || numberOfGuess >= StrategyChars.Length)// found at least one letter
+                        {
+                            if (dict != null && dict.Count > 0)
+                            {
+                                input = FindMostLikelyLetter(dict, matchedLetters, letters);
+                                Console.WriteLine("Find Most Likely Letter: {0}", input);
+                                //var randomWord = dict.ElementAt(random.Next(dict.Count)).Key;
+                                //var leftIndex = wordToGuess.IndexOf("_");
+                                //input = randomWord[leftIndex].ToString();
+                                guessedletters += input;
+                            }
+                        }
+                        else
+                        {
+                            input = StrategyChars[numberOfGuess].ToString();
+                            guessedletters += input;
+                            numberOfGuess++;
+                        }
+
+                        Console.WriteLine("input: {0},", input);
+                    }
+                }
 
                 ns.Write(Encoding.ASCII.GetBytes(input), 0, input.Length);
                 ns.Flush();
