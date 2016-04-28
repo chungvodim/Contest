@@ -59,31 +59,32 @@ namespace ImmiscibleNumbers
                     powerOfThree++;
                 }
                 
-                string binary = Convert.ToString(number, 2);
+                //string binary = Convert.ToString(number, 2);
                 int numberOfZeroes = Math.Max(powerOfTwo,powerOfFive);
-                BigInteger immiscibleNumber = new BigInteger(Math.Pow(10, numberOfZeroes + 10));
+                BigInteger immiscibleNumber = new BigInteger(Math.Pow(10, numberOfZeroes));
                 bool isNotFound = true;
-                bool isNotMin = true;
+                //bool isNotMin = true;
                 while (isNotFound)
                 {
                     //Console.WriteLine(immiscibleNumber);
                     if (immiscibleNumber % number == 0)
                     {
-                        while (isNotMin)
-                        {
-                            BigInteger prevImmiscibleNumber = immiscibleNumber;
-                            immiscibleNumber = immiscibleNumber / 10;
-                            if (immiscibleNumber % number != 0 || immiscibleNumber == 0)
-                            {
-                                immiscibleNumber = prevImmiscibleNumber;
-                                isNotMin = false;
-                            }
-                        }
+                        //while (isNotMin)
+                        //{
+                        //    BigInteger prevImmiscibleNumber = immiscibleNumber;
+                        //    immiscibleNumber = immiscibleNumber / 10;
+                        //    if (immiscibleNumber % number != 0 || immiscibleNumber == 0)
+                        //    {
+                        //        immiscibleNumber = prevImmiscibleNumber;
+                        //        isNotMin = false;
+                        //    }
+                        //}
                         isNotFound = false;
+                        //Console.WriteLine(immiscibleNumber);
                     }
                     else
                     {
-                        immiscibleNumber = GetNextImmiscibleNumber(immiscibleNumber);
+                        immiscibleNumber = GetNextImmiscibleNumber(immiscibleNumber, powerOfThree);
                     }
                 }
                 return immiscibleNumber;
@@ -94,15 +95,21 @@ namespace ImmiscibleNumbers
             }
         }
 
-        private static BigInteger GetNextImmiscibleNumber(BigInteger immiscibleNumber)
+        private static BigInteger GetNextImmiscibleNumber(BigInteger immiscibleNumber, int powerOfThree)
         {
             BigInteger nextImmiscibleNumber = 0;
             StringBuilder sbImmiscibleNumber = new StringBuilder(immiscibleNumber.ToString());
             int numberOfDitgits = sbImmiscibleNumber.Length;
+            int numberOfAddOne = powerOfThree > 0 ? (int)Math.Pow(3, powerOfThree) - (int)(immiscibleNumber % 3) : 1;
             //int indexOfLastOne = sbImmiscibleNumber.ToString().LastIndexOf('1');
             //Console.WriteLine("index Of LastOne : {0}", indexOfLastOne);
             //Console.WriteLine("leng of number : {0}", numberOfDitgits);
-            nextImmiscibleNumber = BigInteger.Parse(sbImmiscibleNumber.Insert(0, "1").ToString());
+
+            for (int i = 1; i <= numberOfAddOne; i++)
+            {
+                nextImmiscibleNumber = BigInteger.Parse(sbImmiscibleNumber.Insert(0, "1").ToString());
+            }
+
             //if (indexOfLastOne == numberOfDitgits - 1)
             //{
             //    //nextImmiscibleNumber = Convert.ToUInt64(sbImmiscibleNumber.Replace("1", "0").Insert(0, "1").ToString());
