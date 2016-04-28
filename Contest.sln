@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LookingGlass", "LookingGlas
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tiles", "Tiles\Tiles.csproj", "{8C120FC7-9651-4463-B99C-50CDEAAB9B80}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImmiscibleNumbers", "ImmiscibleNumbers\ImmiscibleNumbers.csproj", "{656D4908-F1B0-4ACE-BEA8-DEAAC0DA8257}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{8C120FC7-9651-4463-B99C-50CDEAAB9B80}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8C120FC7-9651-4463-B99C-50CDEAAB9B80}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8C120FC7-9651-4463-B99C-50CDEAAB9B80}.Release|Any CPU.Build.0 = Release|Any CPU
+		{656D4908-F1B0-4ACE-BEA8-DEAAC0DA8257}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{656D4908-F1B0-4ACE-BEA8-DEAAC0DA8257}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{656D4908-F1B0-4ACE-BEA8-DEAAC0DA8257}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{656D4908-F1B0-4ACE-BEA8-DEAAC0DA8257}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
