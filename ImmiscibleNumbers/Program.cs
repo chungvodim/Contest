@@ -13,9 +13,11 @@ namespace ImmiscibleNumbers
     {
         static void Main(string[] args)
         {
+            //BigInteger bint = BigInteger.Parse("111111111111111111111111111111111111");
+            //Console.WriteLine(bint%441);
             StringBuilder sb = new StringBuilder();
             string testCaseResult = string.Empty;
-            string[] lines = File.ReadAllLines("submitInput.txt");
+            string[] lines = File.ReadAllLines("testInput.txt");
             for (uint i = 1; i < lines.Length; i++)
             {
                 uint number = Convert.ToUInt32(lines[i]);
@@ -23,7 +25,7 @@ namespace ImmiscibleNumbers
                 testCaseResult = String.Format("Case #{0}: {1}", i, GetNumberOfOnesZeroes(immiscibleNumber));
                 sb.AppendLine(testCaseResult);
                 Console.WriteLine(testCaseResult);
-                File.WriteAllText("submitImmiscibleNumbersResult.txt", sb.ToString());
+                File.WriteAllText("testResult.txt", sb.ToString());
             }
         }
 
@@ -37,12 +39,27 @@ namespace ImmiscibleNumbers
 
         private static BigInteger FindImmiscibleNumber(uint number)
         {
-            if(number > 0)
+            Dictionary<uint, uint> primeDict = new Dictionary<uint, uint>();
+            if(number > 1)
             {
-                int powerOfTwo = 0;
-                int powerOfThree = 0;
-                int powerOfFive = 0;
+                uint powerOfTwo = 0;
+                uint powerOfThree = 0;
+                uint powerOfFive = 0;
                 uint temp = number;
+                for (uint i = 2; i <= number; i++)
+                {
+                    if (temp == 1) break;
+                    primeDict.Add(i, 0);
+                    while (temp % i == 0)
+                    {
+                        temp = temp / i;
+                        primeDict[i]++;
+                    }
+                }
+                primeDict = primeDict.Where(x => x.Value > 0).ToDictionary(x => x.Key, x => x.Value);
+                foreach (var item in primeDict)
+                {
+                }
                 while (temp % 2 == 0)
                 {
                     temp = temp / 2;
@@ -60,7 +77,7 @@ namespace ImmiscibleNumbers
                 }
                 
                 //string binary = Convert.ToString(number, 2);
-                int numberOfZeroes = Math.Max(powerOfTwo,powerOfFive);
+                uint numberOfZeroes = Math.Max(powerOfTwo,powerOfFive);
                 BigInteger immiscibleNumber = new BigInteger(Math.Pow(10, numberOfZeroes));
                 bool isNotFound = true;
                 //bool isNotMin = true;
@@ -89,13 +106,17 @@ namespace ImmiscibleNumbers
                 }
                 return immiscibleNumber;
             }
+            else if(number == 1)
+            {
+                return 1;
+            }
             else
             {
                 return 0;
             }
         }
 
-        private static BigInteger GetNextImmiscibleNumber(BigInteger immiscibleNumber, int powerOfThree)
+        private static BigInteger GetNextImmiscibleNumber(BigInteger immiscibleNumber, uint powerOfThree)
         {
             BigInteger nextImmiscibleNumber = 0;
             StringBuilder sbImmiscibleNumber = new StringBuilder(immiscibleNumber.ToString());
