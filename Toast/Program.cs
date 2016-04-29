@@ -38,22 +38,21 @@ namespace Toast
             Dictionary<uint, uint> stateDict = new Dictionary<uint, uint>();
             stateDict.Add(0,n);
             stateStack.Push(stateDict);
-            uint seconds = GetSeconds(stateStack,k,0);
+            uint seconds = GetSeconds(stateStack,k);
             return seconds.ToString();
         }
 
-        private static uint GetSeconds(Stack<Dictionary<uint, uint>> stateStack, uint k, uint seconds)
+        private static uint GetSeconds(Stack<Dictionary<uint, uint>> stateStack, uint k)
         {
+            uint seconds = 0;
             Dictionary<uint, uint> lastState = stateStack.Pop();
-            if(CheckSum(lastState) == k)
+            while (CheckSum(stateStack.Pop()) != k)
             {
-                return seconds;
-            }
-            else
-            {
+                seconds++;
+                stateStack.Push(lastState);
                 ChangeState(stateStack);
-                return GetSeconds(stateStack , k, seconds);
             }
+            return seconds;
         }
 
         private static void ChangeState(Stack<Dictionary<uint, uint>> stateStack)
