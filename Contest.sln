@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tiles", "Tiles\Tiles.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImmiscibleNumbers", "ImmiscibleNumbers\ImmiscibleNumbers.csproj", "{656D4908-F1B0-4ACE-BEA8-DEAAC0DA8257}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toast", "Toast\Toast.csproj", "{E27263A7-5D0C-4AAA-9B01-EADF229D2ECB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{656D4908-F1B0-4ACE-BEA8-DEAAC0DA8257}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{656D4908-F1B0-4ACE-BEA8-DEAAC0DA8257}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{656D4908-F1B0-4ACE-BEA8-DEAAC0DA8257}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E27263A7-5D0C-4AAA-9B01-EADF229D2ECB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E27263A7-5D0C-4AAA-9B01-EADF229D2ECB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E27263A7-5D0C-4AAA-9B01-EADF229D2ECB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E27263A7-5D0C-4AAA-9B01-EADF229D2ECB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

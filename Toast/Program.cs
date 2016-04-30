@@ -17,57 +17,39 @@ namespace Toast
         {
             StringBuilder sb = new StringBuilder();
             string testCaseResult = string.Empty;
-            string[] lines = File.ReadAllLines("testInput.txt");
+            string[] lines = File.ReadAllLines("submitInput.txt");
             for (int i = 1; i < lines.Length; i++)
             {
-                uint[] arr = lines[i].Split(' ').Select(x => Convert.ToUInt32(x)).ToArray();
+                ulong[] arr = lines[i].Split(' ').Select(x => Convert.ToUInt64(x)).ToArray();
                 testCaseResult = String.Format("Case #{0}: {1}", i, GetSeconds(arr[0], arr[1], arr[2]));
                 sb.AppendLine(testCaseResult);
                 Console.WriteLine(testCaseResult);
-                File.WriteAllText("testResult.txt", sb.ToString());
+                File.WriteAllText("submitResult.txt", sb.ToString());
             }
         }
 
-        private static string GetSeconds(uint n, uint m, uint k)
+        private static string GetSeconds(ulong n, ulong m, ulong k)
         {
-            if (k < n * m) return "IMPOSSIBLE";
             if (k == n * m) return "0";
-            if(k % m != 0) return "IMPOSSIBLE";
+            if(k < n * m) return "IMPOSSIBLE";
+            if (k % m != 0) return "IMPOSSIBLE";
             k = k / m;
-            Stack<Dictionary<uint, uint>> stateStack = new Stack<Dictionary<uint, uint>>();
-            Dictionary<uint, uint> stateDict = new Dictionary<uint, uint>();
-            stateDict.Add(0,n);
-            stateStack.Push(stateDict);
-            uint seconds = GetSeconds(stateStack,k);
-            return seconds.ToString();
-        }
-
-        private static uint GetSeconds(Stack<Dictionary<uint, uint>> stateStack, uint k)
-        {
-            uint seconds = 0;
-            Dictionary<uint, uint> lastState = stateStack.Pop();
-            while (CheckSum(stateStack.Pop()) != k)
+            k = k - n + 1;
+            int count = 0;
+            while( k != 0)
             {
-                seconds++;
-                stateStack.Push(lastState);
-                ChangeState(stateStack);
+                if(k % 2 == 1)
+                {
+                    k = k - 1;
+                }
+                else
+                {
+                    k = k / 2;
+                }
+                count++;
             }
-            return seconds;
+            return (count-1).ToString();
         }
 
-        private static void ChangeState(Stack<Dictionary<uint, uint>> stateStack)
-        {
-            throw new NotImplementedException();
-        }
-
-        private static uint CheckSum(Dictionary<uint, uint> stateDict)
-        {
-            uint sum = 0;
-            foreach (var item in stateDict)
-            {
-                sum += (uint)Math.Pow(2, item.Key) * item.Value;
-            }
-            return sum;
-        }
     }
 }
