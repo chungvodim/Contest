@@ -39,6 +39,7 @@ namespace PikaVirus
 
                 BuildNode(nodeList, srcCity, destCity);
             }
+            //Draw(nodeList);
             List<Node> comparedNodeList = new List<Node>();
             for (uint i = numberOfCities + 1; i < lines.Length; i++)
             {
@@ -46,14 +47,32 @@ namespace PikaVirus
                 srcCity = srcDest[0];
                 destCity = srcDest[1];
                 BuildNode(comparedNodeList, srcCity, destCity);
-                if((i - numberOfCities) % (numberOfCities - 1) == 0)
+                if ((i - numberOfCities) % (numberOfCities - 1) == 0)
                 {
+                    //Draw(comparedNodeList);
                     testCaseResult = CompareViruses(nodeList, comparedNodeList);
                     sb.AppendLine(String.Format("Case #{0}:{1}", (i - numberOfCities) / (numberOfCities - 1), testCaseResult));
                     comparedNodeList.Clear();
                 }
             }
             File.WriteAllText("testResult.txt", sb.ToString());
+        }
+
+        private static void Draw(List<Node> nodeList)
+        {
+            var temp = nodeList.OrderBy(x => x.Level).ToList();
+            int maxLevel = temp.Last().Level;
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i <= maxLevel; i++)
+            {
+                var level = nodeList.Where(x => x.Level == i).OrderBy(x => x.City).ToList();
+                foreach (var item in level)
+                {
+                    sb.Append(item.City + " ");
+                }
+                sb.Append("\n");
+            }
+            File.WriteAllText("Nodes.txt",sb.ToString());
         }
 
         private static string CompareViruses(List<Node> nodeList, List<Node> comparedNodeList)
@@ -64,8 +83,8 @@ namespace PikaVirus
             }
             else
             {
-                nodeList = nodeList.OrderBy(x => x.City).ToList();
-                comparedNodeList = comparedNodeList.OrderBy(x => x.City).ToList();
+                nodeList = nodeList.OrderBy(x => x.City).ThenBy(x => x.Level).ToList();
+                comparedNodeList = comparedNodeList.OrderBy(x => x.City).ThenBy(x => x.Level).ToList();
                 StringBuilder sb = new StringBuilder();
                 List<string> comparedCityList = new List<string>();
                 for (int i = 0; i < nodeList.Count; i++)
