@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImmiscibleNumbers", "Immisc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toast", "Toast\Toast.csproj", "{E27263A7-5D0C-4AAA-9B01-EADF229D2ECB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PikaVirus", "PikaVirus\PikaVirus.csproj", "{2E96C36E-9355-4FE8-90C4-F9702BA5C390}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{E27263A7-5D0C-4AAA-9B01-EADF229D2ECB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E27263A7-5D0C-4AAA-9B01-EADF229D2ECB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E27263A7-5D0C-4AAA-9B01-EADF229D2ECB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E96C36E-9355-4FE8-90C4-F9702BA5C390}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E96C36E-9355-4FE8-90C4-F9702BA5C390}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E96C36E-9355-4FE8-90C4-F9702BA5C390}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E96C36E-9355-4FE8-90C4-F9702BA5C390}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
