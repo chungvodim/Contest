@@ -27,7 +27,7 @@ namespace PikaVirus
         {
             StringBuilder sb = new StringBuilder();
             string testCaseResult = string.Empty;
-            string[] lines = File.ReadAllLines("testInput.txt");
+            string[] lines = File.ReadAllLines("submitInput.txt");
             uint numberOfCities = Convert.ToUInt32(lines[0]);
             string[] srcDest;
             string srcCity;
@@ -54,11 +54,11 @@ namespace PikaVirus
                     //Draw(comparedNodeList);
                     testCaseResult = CompareViruses(nodeList, comparedNodeList);
                     sb.AppendLine(String.Format("Case #{0}:{1}", (i - numberOfCities) / (numberOfCities - 1), testCaseResult));
-                    Console.WriteLine(String.Format("Case #{0}:{1}", (i - numberOfCities) / (numberOfCities - 1), testCaseResult));
+                    //Console.WriteLine(String.Format("Case #{0}:{1}", (i - numberOfCities) / (numberOfCities - 1), testCaseResult));
                     comparedNodeList.Clear();
                 }
             }
-            File.WriteAllText("testResult.txt", sb.ToString());
+            File.WriteAllText("submitResult.txt", sb.ToString());
         }
 
         private static void Draw(List<Node> nodeList)
@@ -92,18 +92,23 @@ namespace PikaVirus
                 List<string> comparedCityList = new List<string>();
                 for (int i = 0; i < nodeList.Count; i++)
                 {
-                    var comparedCity = comparedNodeList.FirstOrDefault(x => x.Level == nodeList[i].Level 
+                    //if(nodeList[i].City == "aroco")
+                    //{
+                    //    Console.WriteLine("Debug");
+                    //}
+                    var comparedCitys = comparedNodeList.Where(x => x.Level == nodeList[i].Level 
                     && x.NumberOfChildren == nodeList[i].NumberOfChildren 
                     && IsSameSpreadingPath(nodeList[i], nodeList, x, comparedNodeList) 
-                    && !comparedCityList.Contains(x.City));
-                    if (comparedCity == null)
+                    && !comparedCityList.Contains(x.City)).ToList();
+                    if (comparedCitys == null || comparedCitys.Count == 0)
                     {
                         return " NO";
                     }
                     else
                     {
-                        comparedCityList.Add(comparedCity.City);
-                        sb.Append(String.Format(" {0}/{1}",nodeList[i].City, comparedCity.City));
+                        comparedCityList.Add(comparedCitys.First().City);
+                        sb.Append(String.Format(" {0}/{1}",nodeList[i].City, comparedCitys.First().City));
+                        //Console.WriteLine(String.Format(" {0}/{1}", nodeList[i].City, comparedCitys.First().City));
                     }
                 }
                 return sb.ToString();
@@ -112,6 +117,10 @@ namespace PikaVirus
 
         private static bool IsSameSpreadingPath(Node ancestorNode, List<Node> nodeList, Node comparedAncestorNode, List<Node> comparedNodeList)
         {
+            //if (comparedAncestorNode.City == "alcanices")
+            //{
+            //    Console.WriteLine("Debug");
+            //}
             var ancestor = ancestorNode.City;
             var comparedAncestor = comparedAncestorNode.City;
             nodeList = nodeList.OrderBy(x => x.City).ToList();
@@ -122,9 +131,12 @@ namespace PikaVirus
             }
             else
             {
+                List<string> comparedCityList = new List<string>();
                 foreach (var childNode in nodeList.Where(x => x.Ancestor == ancestor).ToList())
                 {
-                    var comparedAncestorNodes = comparedNodeList.Where(x => x.NumberOfChildren == childNode.NumberOfChildren && x.Ancestor == comparedAncestor).ToList();
+                    var comparedAncestorNodes = comparedNodeList.Where(x => x.NumberOfChildren == childNode.NumberOfChildren 
+                    && x.Ancestor == comparedAncestor
+                    && !comparedCityList.Contains(x.City)).ToList();
                     if(comparedAncestorNodes == null || comparedAncestorNodes.Count == 0)
                     {
                         return false;
@@ -133,13 +145,20 @@ namespace PikaVirus
                     {
                         for (int i = 0; i < comparedAncestorNodes.Count; i++)
                         {
+                            //if(comparedAncestorNodes[i].City == "albaina")
+                            //{
+                            //    Console.WriteLine("Debug");
+                            //}
                             if (IsSameSpreadingPath(childNode, nodeList, comparedAncestorNodes[i], comparedNodeList))
                             {
                                 comparedAncestorNode = comparedAncestorNodes[i];
+                                comparedCityList.Add(comparedAncestorNode.City);
                                 break;
                             }
                             else if(i == comparedAncestorNodes.Count - 1)
                             {
+                                //Console.WriteLine("{0}/{1}-{2}/{3}-{4}/{5}", childNode.City, comparedAncestorNodes[i].City
+                                //    , childNode.Ancestor, comparedAncestorNodes[i].Ancestor, childNode.Level, comparedAncestorNodes[i].Level);
                                 return false;
                             } 
                         }
@@ -163,7 +182,8 @@ namespace PikaVirus
                 if (node != null)
                 {
                     node.NumberOfChildren++;
-                    nodeList.Add(new Node(destCity, node.Level + 1, 0, node.City));
+                    int level = node.Level + 1;
+                    nodeList.Add(new Node(destCity, level, 0, srcCity));
                 }
             }
         }
