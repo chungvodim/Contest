@@ -9,15 +9,17 @@ namespace PikaVirus
 {
     public class Node
     {
-        public Node(string city, int level, int numberOfWaysOut)
+        public Node(string city, int level, int numberOfChildren, string ancestor)
         {
             this.City = city;
             this.Level = level;
-            this.NumberOfWaysOut = numberOfWaysOut;
+            this.NumberOfChildren = numberOfChildren;
+            this.Ancestor = ancestor;
         }
         public string City { get; set; }
         public int Level { get; set; }
-        public int NumberOfWaysOut { get; set; }
+        public int NumberOfChildren { get; set; }
+        public string Ancestor { get; set; }
     }
     class Program
     {
@@ -52,6 +54,7 @@ namespace PikaVirus
                     //Draw(comparedNodeList);
                     testCaseResult = CompareViruses(nodeList, comparedNodeList);
                     sb.AppendLine(String.Format("Case #{0}:{1}", (i - numberOfCities) / (numberOfCities - 1), testCaseResult));
+                    Console.WriteLine(String.Format("Case #{0}:{1}", (i - numberOfCities) / (numberOfCities - 1), testCaseResult));
                     comparedNodeList.Clear();
                 }
             }
@@ -83,13 +86,16 @@ namespace PikaVirus
             }
             else
             {
-                nodeList = nodeList.OrderBy(x => x.City).ThenBy(x => x.Level).ToList();
-                comparedNodeList = comparedNodeList.OrderBy(x => x.City).ThenBy(x => x.Level).ToList();
+                nodeList = nodeList.OrderBy(x => x.City).ToList();
+                comparedNodeList = comparedNodeList.OrderBy(x => x.City).ToList();
                 StringBuilder sb = new StringBuilder();
                 List<string> comparedCityList = new List<string>();
                 for (int i = 0; i < nodeList.Count; i++)
                 {
-                    var comparedCity = comparedNodeList.FirstOrDefault(x => x.Level == nodeList[i].Level && x.NumberOfWaysOut == nodeList[i].NumberOfWaysOut && !comparedCityList.Contains(x.City));
+                    var comparedCity = comparedNodeList.FirstOrDefault(x => x.Level == nodeList[i].Level 
+                    && x.NumberOfChildren == nodeList[i].NumberOfChildren 
+                    && IsSameSpreadingPath(nodeList[i], nodeList, x, comparedNodeList) 
+                    && !comparedCityList.Contains(x.City));
                     if (comparedCity == null)
                     {
                         return " NO";
@@ -104,20 +110,60 @@ namespace PikaVirus
             }
         }
 
+        private static bool IsSameSpreadingPath(Node ancestorNode, List<Node> nodeList, Node comparedAncestorNode, List<Node> comparedNodeList)
+        {
+            var ancestor = ancestorNode.City;
+            var comparedAncestor = comparedAncestorNode.City;
+            nodeList = nodeList.OrderBy(x => x.City).ToList();
+            comparedNodeList = comparedNodeList.OrderBy(x => x.City).ToList();
+            if (nodeList.Where(x => x.Ancestor == ancestor).ToList().Count != comparedNodeList.Where(x => x.Ancestor == comparedAncestor).ToList().Count)
+            {
+                return false;
+            }
+            else
+            {
+                foreach (var childNode in nodeList.Where(x => x.Ancestor == ancestor).ToList())
+                {
+                    var comparedAncestorNodes = comparedNodeList.Where(x => x.NumberOfChildren == childNode.NumberOfChildren && x.Ancestor == comparedAncestor).ToList();
+                    if(comparedAncestorNodes == null || comparedAncestorNodes.Count == 0)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        for (int i = 0; i < comparedAncestorNodes.Count; i++)
+                        {
+                            if (IsSameSpreadingPath(childNode, nodeList, comparedAncestorNodes[i], comparedNodeList))
+                            {
+                                comparedAncestorNode = comparedAncestorNodes[i];
+                                break;
+                            }
+                            else if(i == comparedAncestorNodes.Count - 1)
+                            {
+                                return false;
+                            } 
+                        }
+                        IsSameSpreadingPath(childNode, nodeList, comparedAncestorNode, comparedNodeList);
+                    }
+                }
+            }
+            return true;
+        }
+
         private static void BuildNode(List<Node> nodeList, string srcCity, string destCity)
         {
             if(nodeList.Count == 0)
             {
-                nodeList.Add(new Node(srcCity,0,1));
-                nodeList.Add(new Node(destCity, 1, 0));
+                nodeList.Add(new Node(srcCity,0,1,string.Empty));
+                nodeList.Add(new Node(destCity, 1, 0, srcCity));
             }
             else
             {
                 Node node = nodeList.FirstOrDefault(x => x.City == srcCity);
                 if (node != null)
                 {
-                    node.NumberOfWaysOut++;
-                    nodeList.Add(new Node(destCity, node.Level + 1, 0));
+                    node.NumberOfChildren++;
+                    nodeList.Add(new Node(destCity, node.Level + 1, 0, node.City));
                 }
             }
         }
