@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contest", "Contest\Contest.csproj", "{F1D686D4-5D6C-41D1-B868-265A8406F965}"
 EndProject
@@ -12,6 +12,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tiles", "Tiles\Tiles.csproj", "{8C120FC7-9651-4463-B99C-50CDEAAB9B80}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImmiscibleNumbers", "ImmiscibleNumbers\ImmiscibleNumbers.csproj", "{656D4908-F1B0-4ACE-BEA8-DEAAC0DA8257}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContainerMadness", "ContainerMadness\ContainerMadness.csproj", "{09C19DAF-6D32-40D3-8241-015C21EABABB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{656D4908-F1B0-4ACE-BEA8-DEAAC0DA8257}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{656D4908-F1B0-4ACE-BEA8-DEAAC0DA8257}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{656D4908-F1B0-4ACE-BEA8-DEAAC0DA8257}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09C19DAF-6D32-40D3-8241-015C21EABABB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09C19DAF-6D32-40D3-8241-015C21EABABB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09C19DAF-6D32-40D3-8241-015C21EABABB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09C19DAF-6D32-40D3-8241-015C21EABABB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

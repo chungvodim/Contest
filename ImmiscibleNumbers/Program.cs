@@ -16,11 +16,10 @@ namespace ImmiscibleNumbers
             StringBuilder sb = new StringBuilder();
             string testCaseResult = string.Empty;
             string[] lines = File.ReadAllLines("submitInput.txt");
-            for (uint i = 1; i < lines.Length; i++)
+            for (int i = 1; i < lines.Length; i++)
             {
-                uint number = Convert.ToUInt32(lines[i]);
-                BigInteger immiscibleNumber = FindImmiscibleNumber(number);
-                testCaseResult = String.Format("Case #{0}: {1}", i, GetNumberOfOnesZeroes(immiscibleNumber));
+                UInt64 number = Convert.ToUInt32(lines[i]);
+                testCaseResult = String.Format("Case #{0}: {1}", i, FindImmiscibleNumber(number));
                 sb.AppendLine(testCaseResult);
                 Console.WriteLine(testCaseResult);
                 File.WriteAllText("submitImmiscibleNumbersResult.txt", sb.ToString());
@@ -35,92 +34,53 @@ namespace ImmiscibleNumbers
             return numberOfOnes + " " + numberOfZeroes;
         }
 
-        private static BigInteger FindImmiscibleNumber(uint number)
+        private static string FindImmiscibleNumber(UInt64 number)
         {
             if(number > 0)
             {
                 int powerOfTwo = 0;
-                int powerOfThree = 0;
                 int powerOfFive = 0;
-                uint temp = number;
-                while (temp % 2 == 0)
+                while (number % 2 == 0)
                 {
-                    temp = temp / 2;
+                    number = number / 2;
                     powerOfTwo ++;
                 }
-                while (temp % 5 == 0)
+                while (number % 5 == 0)
                 {
-                    temp = temp / 5;
-                    powerOfFive++;
-                }
-                while (temp % 3 == 0)
-                {
-                    temp = temp / 3;
-                    powerOfThree++;
+                    number = number / 5;
+                    powerOfFive ++;
                 }
                 
-                //string binary = Convert.ToString(number, 2);
                 int numberOfZeroes = Math.Max(powerOfTwo,powerOfFive);
                 BigInteger immiscibleNumber = new BigInteger(Math.Pow(10, numberOfZeroes));
-                bool isNotFound = true;
-                //bool isNotMin = true;
-                while (isNotFound)
-                {
-                    //Console.WriteLine(immiscibleNumber);
-                    if (immiscibleNumber % number == 0)
-                    {
-                        //while (isNotMin)
-                        //{
-                        //    BigInteger prevImmiscibleNumber = immiscibleNumber;
-                        //    immiscibleNumber = immiscibleNumber / 10;
-                        //    if (immiscibleNumber % number != 0 || immiscibleNumber == 0)
-                        //    {
-                        //        immiscibleNumber = prevImmiscibleNumber;
-                        //        isNotMin = false;
-                        //    }
-                        //}
-                        isNotFound = false;
-                        //Console.WriteLine(immiscibleNumber);
-                    }
-                    else
-                    {
-                        immiscibleNumber = GetNextImmiscibleNumber(immiscibleNumber, powerOfThree);
-                    }
-                }
-                return immiscibleNumber;
+                UInt64 numberOfOnes = GetNumberOfOnes(number);
+                return String.Format("{0} {1}", numberOfOnes, numberOfZeroes);
             }
             else
             {
-                return 0;
+                return String.Format("{0} {1}", 0, 1);
             }
         }
 
-        private static BigInteger GetNextImmiscibleNumber(BigInteger immiscibleNumber, int powerOfThree)
+
+        private static UInt64 GetNumberOfOnes(UInt64 number)
         {
-            BigInteger nextImmiscibleNumber = 0;
-            StringBuilder sbImmiscibleNumber = new StringBuilder(immiscibleNumber.ToString());
-            int numberOfDitgits = sbImmiscibleNumber.Length;
-            int numberOfAddOne = powerOfThree > 0 ? (int)Math.Pow(3, powerOfThree) - (int)(immiscibleNumber % 3) : 1;
-            //int indexOfLastOne = sbImmiscibleNumber.ToString().LastIndexOf('1');
-            //Console.WriteLine("index Of LastOne : {0}", indexOfLastOne);
-            //Console.WriteLine("leng of number : {0}", numberOfDitgits);
+            UInt64 numberOfOnes = 0;
+            UInt64 f = 0;
 
-            for (int i = 1; i <= numberOfAddOne; i++)
+            do
             {
-                nextImmiscibleNumber = BigInteger.Parse(sbImmiscibleNumber.Insert(0, "1").ToString());
-            }
+                f = f * 10 + 1;
+                f = f % number;
+                numberOfOnes++;
+            } while (f != 0);
 
-            //if (indexOfLastOne == numberOfDitgits - 1)
+            //while (numberOfOnes % number != 0)
             //{
-            //    //nextImmiscibleNumber = Convert.ToUInt64(sbImmiscibleNumber.Replace("1", "0").Insert(0, "1").ToString());
-            //    nextImmiscibleNumber = BigInteger.Parse(sbImmiscibleNumber.Replace("1", "0").Insert(0, "1").ToString());
+            //    numberOfOnes = numberOfOnes % number;
+            //    numberOfOnes = ((numberOfOnes * 10) + 1);                
             //}
-            //else
-            //{
-            //    sbImmiscibleNumber[indexOfLastOne + 1] = '1';
-            //    nextImmiscibleNumber = BigInteger.Parse(sbImmiscibleNumber.ToString());
-            //}
-            return nextImmiscibleNumber;
+            return numberOfOnes;
         }
     }
 }
